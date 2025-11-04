@@ -36,5 +36,25 @@ public class Main {
         ArrayList<String> suggestions = validator.nearMisses("booook");
         assert suggestions.contains("book") : "Deletion test failed for 'booook'";
     }
+
+    private static void testNearMisses_Insertion(WordValidation validator) {
+        ArrayList<String> suggestions = validator.nearMisses("fnd");
+        assert suggestions.contains("find") : "Insertion test failed for 'fnd'";
+    }
+
+    private static void testNearMisses_Substitution(WordValidation validator) {
+        ArrayList<String> suggestions = validator.nearMisses("fimd");
+        assert suggestions.contains("find") : "Substitution test failed for 'fimd'";
+    }
+
+    private static void testNearMisses_Transposition(WordValidation validator) {
+        ArrayList<String> suggestions = validator.nearMisses("adroe");
+        assert suggestions.contains("adore") : "Transposition test failed for 'adroe'";
+    }
+
+    private static void testNearMisses_Split(WordValidation validator) {
+        ArrayList<String> suggestions = validator.nearMisses("cattell");
+        assert suggestions.contains("cat tell") : "Split test failed for 'cattell'";
+    }
     
 }
