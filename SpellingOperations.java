@@ -1,5 +1,3 @@
-package a5;
-
 import java.util.ArrayList;
 
 /**
@@ -17,5 +15,8 @@ public interface SpellingOperations {
    *  @return a list of all valid words that are one edit away from the query
    */
   public ArrayList<String> nearMisses(String query);
-  
+
 }
+ 
+
+  
