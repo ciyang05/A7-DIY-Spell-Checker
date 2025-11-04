@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Set;
 public class Main {
 
@@ -17,12 +18,23 @@ public class Main {
     private static void testContainsWord(WordValidation validator) {
 
         //valid words
-        assert validator.containsWord("hello");
-        assert validator.containsWord("Hello");
-        assert validator.containsWord("HELLO");
+        assert validator.containsWord("book");
+        assert validator.containsWord("find");
+        assert validator.containsWord("kids");
         assert validator.containsWord("cat");
-        assert validator.containsWord("lattice");
+        assert validator.containsWord("tell");
 
+        //Invalid words
+        assert !validator.containsWord("ador");
+        assert !validator.containsWord("boook");
+        assert !validator.containsWord("");
+        assert !validator.containsWord("xyz"); 
+
+    }
+
+    private static void testNearMisses_Deletion(WordValidation validator) {
+        ArrayList<String> suggestions = validator.nearMisses("booook");
+        assert suggestions.contains("book") : "Deletion test failed for 'booook'";
     }
     
 }
