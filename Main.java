@@ -13,8 +13,16 @@ public class Main {
         
     }
 
+    //Tests fr valid and invalis inputs for containsWord
     private static void testContainsWord(WordValidation validator) {
-        
+
+        //valid words
+        assert validator.containsWord("hello");
+        assert validator.containsWord("Hello");
+        assert validator.containsWord("HELLO");
+        assert validator.containsWord("cat");
+        assert validator.containsWord("lattice");
+
     }
     
 }
