@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.io.*;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WordValidation {
 
@@ -20,8 +22,8 @@ public class WordValidation {
         // exits the system, flagging that program ended bcs of an error/exception
         System.exit(-1);
     }
-    // create list to store parsed file's words
-    ArrayList<String> parsedFile = new ArrayList<>();
+    // create temp list to store parsed file's words
+    ArrayList<String> tempFile = new ArrayList<>();
     while (file.hasNextLine()) {
         String line = file.nextLine();
         // splits the word/sentence up based on apparent white space
@@ -30,10 +32,30 @@ public class WordValidation {
         // goes to specific index, stores the word, then prints it
         String word = fields[0];
         // adds word to parasedFile list
-        parsedFile.add(word);
-        System.out.println("This is the word: " + word);
+        tempFile.add(word);
+        System.out.println("This is the word before getting rid of any puncutation: " + word);
     }
     file.close();
+
+    // creates final list containing parsed words w/no punctuation and converts word to lowercase
+    ArrayList<String> parsedFile = new ArrayList<>();
+    // the pattern that will be compared to words in the file
+    // ^ indicates start of string, [a-zA-Z0-9] indicates pne or more char that are letters or digits, $ indicates end of string
+    String regex = "^[a-zA-Z0-9]+$";
+
+    // compile the pattern 
+    Pattern pattern = Pattern.compile(regex);
+
+    // iterates tempFile, turns every word in the list to lowercase, match it to the pattern
+    // if the word fits the pattern, add it to the final parsedFile list 
+    for (String word : tempFile) {
+        word.toLowerCase();
+        Matcher matcher = pattern.matcher(word);
+
+        if (matcher.matches()) {
+            parsedFile.add(word);
+        }
+    }
 
     // creates empty hashset
     HashSet<String> hs = new HashSet<>();
