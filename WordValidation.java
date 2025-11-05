@@ -7,6 +7,9 @@ import java.util.regex.Pattern;
 
 public class WordValidation {
 
+    // empty hashset to contain words in the words.txt file
+    HashSet<String> dictionary = new HashSet<>();
+
     /**
      * constructor that creates a hashset based off of word file
      * @param args
@@ -57,18 +60,14 @@ public class WordValidation {
         }
     }
 
-    // creates empty hashset
-    HashSet<String> hs = new HashSet<>();
+
     // loops through each string in the parsedFile list and adds it to hashset
     for (String element : parsedFile) {
-        hs.add(element);
+        dictionary.add(element);
     }
     // for testing purposes
-    System.out.println("This is the hashset after parsing the file: " + hs);
+    System.out.println("This is the hashset after parsing the file: " + dictionary);
     }
-
-
-
 
 
     /**
@@ -76,6 +75,14 @@ public class WordValidation {
      *  @return true if the query word is in the dictionary.
      */
     public boolean containsWord(String query) {
+        // checks if dictionary hashset contains the string
+        // if so, return true
+        if (dictionary.contains(query)) {
+            return true;
+        // if it doesn't, return false
+        } else {
+            return false;
+        }
 
     }
   
