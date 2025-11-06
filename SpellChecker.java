@@ -5,9 +5,11 @@ public class SpellChecker implements SpellingOperations{
    *  @param query the word to check
    *  @return true if the query word is in the dictionary.
    */
-  public boolean containsWord(String query);
+  public boolean containsWord(String query){
+
+  }
   
-   /**
+  /**
   *  @param query the word to check
   *  @return a list of all valid words that are one edit away from the query
   */
@@ -18,7 +20,10 @@ public class SpellChecker implements SpellingOperations{
      for (char c ='a'; c <='z'; c++ ){
        String newWord = query.substring(0, i) + c + query.substring(i);
        if (containsWord(newWord)){
-         suggestions.add(newWord);
+        if (!suggestions.contains(newWord)){ //makes sure that word not already in suggestions
+            suggestions.add(newWord);
+        }
+         
        }
 
 
@@ -29,7 +34,10 @@ public class SpellChecker implements SpellingOperations{
        StringBuilder sb = new StringBuilder(query);
        String newWord = sb.deleteCharAt(i).toString();
        if (containsWord(newWord)){
-       suggestions.add(newWord);
+        if (!suggestions.contains(newWord)){ //makes sure that word not already in suggestions
+            suggestions.add(newWord);
+        }
+       
        }
    }
 
@@ -41,7 +49,10 @@ public class SpellChecker implements SpellingOperations{
        String letter = String.valueOf(c);
        String newWord = sb.replace(i, i+1, letter).toString();
        if (containsWord(newWord)){
-       suggestions.add(newWord);
+        if (!suggestions.contains(newWord)){ //makes sure that word not already in suggestions
+            suggestions.add(newWord);
+       }
+       
        }
      }
    }
@@ -56,11 +67,29 @@ public class SpellChecker implements SpellingOperations{
        sb.setCharAt(i+1, char1);
        String newWord = sb.toString();
        if (containsWord(newWord)){
-         suggestions.add(newWord);
+        if (!suggestions.contains(newWord)){ //makes sure that word not already in suggestions
+            suggestions.add(newWord);
+        }
+         
        }
     
    }
+   //Split into two possible words
+   for (int i = 1; i<query.length()-1;i++){
+    StringBuilder sb = new StringBuilder(query);
+    String left= sb.substring(0,i).toString();
+    String right = sb.substring(i);
+    if (containsWord(left) && containsWord(right)){  // adds left word and right word
+        String newWords = left + " " + right;
+        if (!suggestions.contains(newWords)){ //makes sure that word not already in suggestions
+            suggestions.add(newWords);
+        }
 
+
+    }
+
+   } 
+    
 
    return suggestions;
  }
