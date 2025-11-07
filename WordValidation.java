@@ -149,10 +149,10 @@ public class WordValidation implements SpellingOperations {
         }
 
         //Split into two possible words
-        for (int i = 1; i<query.length()-1;i++){
+        for (int i = 1; i<query.length();i++){
             StringBuilder sb = new StringBuilder(query);
-            String left= sb.substring(0,i).toString();
-            String right = sb.substring(i);
+            String left= query.substring(0,i).toString();
+            String right = query.substring(i);
             if (containsWord(left) && containsWord(right)){  // adds left word and right word
                 String newWords = left + " " + right;
                 if (!suggestions.contains(newWords)){ //makes sure that word not already in suggestions
