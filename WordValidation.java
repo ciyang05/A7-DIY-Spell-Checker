@@ -5,7 +5,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class WordValidation {
+public class WordValidation implements SpellingOperations {
 
     // empty hashset to contain words in the words.txt file
     HashSet<String> dictionary = new HashSet<>();
@@ -15,8 +15,7 @@ public class WordValidation {
      * @param args
      * @return nothing
      */
-    public WordValidation(String[] args) {
-        String filename = (args.length > 0) ? args[0] : "words.txt";
+    public WordValidation(String filename) {
         Scanner file = null;
     try {
         file = new Scanner(new File(filename));
@@ -25,7 +24,7 @@ public class WordValidation {
         // exits the system, flagging that program ended bcs of an error/exception
         System.exit(-1);
     }
-    // create temp list to store parsed file's words
+    // temporary list to store parsed file's words
     ArrayList<String> tempFile = new ArrayList<>();
     while (file.hasNextLine()) {
         String line = file.nextLine();
@@ -87,32 +86,84 @@ public class WordValidation {
     }
   
     /**
-     *  @param query the word to check
-     *  @return a list of all valid words that are one edit away from the query
-     */
+    *  @param query the word to check
+    *  @return a list of all valid words that are one edit away from the query
+    */
     public ArrayList<String> nearMisses(String query) {
+        // hello
         ArrayList<String> suggestions = new ArrayList<>();
         // Inserting one Letter
         for (int i = 0; i<= query.length(); i++){
-        for (char c ='a'; c <='z'; c++ ){
+            for (char c ='a'; c <='z'; c++ ){
             String newWord = query.substring(0, i) + c + query.substring(i);
             if (containsWord(newWord)){
-            suggestions.add(newWord);
+                if (!suggestions.contains(newWord)){ //makes sure that word not already in suggestions
+                    suggestions.add(newWord);
+                }
+                
             }
-
         }
+        
         }
         //Removing letters
         for (int i = 0; i < query.length(); i++){
             StringBuilder sb = new StringBuilder(query);
-            String newWord = sb.deleteCharAt(i);
+            String newWord = sb.deleteCharAt(i).toString();
             if (containsWord(newWord)){
-            suggestions.add(newWord);
+                if (!suggestions.contains(newWord)){ //makes sure that word not already in suggestions
+                    suggestions.add(newWord);
+                }
+            
             }
         }
 
+        //substituting letters
+        for (int i = 0; i< query.length(); i++){
+            for (char c = 'a'; c <= 'z'; c++){
+            StringBuilder sb = new StringBuilder(query);
+            String letter = String.valueOf(c);
+            String newWord = sb.replace(i, i+1, letter).toString();
+            if (containsWord(newWord)){
+                if (!suggestions.contains(newWord)){ //makes sure that word not already in suggestions
+                    suggestions.add(newWord);
+            }
+            
+            }
+            }
+        }
+
+        //transpositions
+        for (int i = 0; i < query.length() - 1; i++){
+            StringBuilder sb = new StringBuilder(query);
+            char char1 = query.charAt(i);
+            char char2 = query.charAt(i+1);
+            sb.setCharAt(i, char2);
+            sb.setCharAt(i+1, char1);
+            String newWord = sb.toString();
+            if (containsWord(newWord)){
+                if (!suggestions.contains(newWord)){ //makes sure that word not already in suggestions
+                    suggestions.add(newWord);
+                }
+                
+            }  
+        }
+
+        //Split into two possible words
+        for (int i = 1; i<query.length()-1;i++){
+            StringBuilder sb = new StringBuilder(query);
+            String left= sb.substring(0,i).toString();
+            String right = sb.substring(i);
+            if (containsWord(left) && containsWord(right)){  // adds left word and right word
+                String newWords = left + " " + right;
+                if (!suggestions.contains(newWords)){ //makes sure that word not already in suggestions
+                    suggestions.add(newWords);
+                }
+
+
+            }
+
+        } 
         return suggestions;
     }
-
 
 }
