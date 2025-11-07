@@ -1,35 +1,58 @@
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.Set;
 
+
 public class SpellChecker {
 
-    static void reportNotFound(String word, List<String> suggestions){
-       System.out.println("Not found: " + word);
-
-       if (suggestions != null && suggestions.isEmpty()){
-           StringBuilder sb = new StringBuilder( " Suggestions: ");
-           System.out.println(" Suggestions: ");
-           for (String s: suggestions){
-               sb.append(s).append(" ");
+   /**
+    * @param word
+    * @param suggestions
+    */
+   static void reportNotFound(String word, List<String> suggestions){
+      System.out.println("Not found: " + word);
 
 
-           }
-           System.out.println(sb.toString());
-       }
-   }
+      if (suggestions != null && suggestions.isEmpty()){
+          StringBuilder sb = new StringBuilder( " Suggestions: ");
+          System.out.println(" Suggestions: ");
+          for (String s: suggestions){
+              sb.append(s).append(" ");
 
 
-   static void reportCorrect(String word){
+
+
+          }
+          System.out.println(sb.toString());
+      }
+  }
+
+
+
+
+  /**
+  * @param word
+  */
+    static void reportCorrect(String word) {
        System.out.println("" + word + "' is spelled correctly.");
    }
 
 
-   static List getSuggestions(String word, WordValidation validator){
+
+
+   /**
+    * @param word
+    * @param validator
+    * @return limitedSuggestions
+    */
+   static List<String> getSuggestions(String word, WordValidation wordValidation){
        final int MAX_SUGGESTIONS = 10;
-       List<String> allSuggestions = validator.suggestions(word);
+       List<String> allSuggestions = wordValidation.nearMisses(word);
+
+
 
 
        if (allSuggestions == null || allSuggestions.isEmpty()){
@@ -37,25 +60,39 @@ public class SpellChecker {
        }
 
 
+
+
        List<String> limitedSuggestions = new ArrayList<>();
        for(int i = 0; i < allSuggestions.size() && i < MAX_SUGGESTIONS; i++){
            limitedSuggestions.add(allSuggestions.get(i));
        }
+       return limitedSuggestions;
    }
 
 
+
+
+   /**
+    * @param raw
+    * @return s
+    */
    static String normalize(String raw){
        if (raw == null){
            return "";
        }
-       String word = raw.toLowerCase();
-       word = word.replaceAll("[^a-z]", "");
-       word = word.trim();
-       return word;
+       String s = raw.toLowerCase(Locale.ROOT);
+       s = s.replaceAll("[^a-z]", "");
+       return s;
    }
 
 
-   void handleStdinMode(Scanner in, WordValidation validator){
+
+
+   /**
+    * @param in
+    * @param validator
+    */
+   public static void handleStdinMode(Scanner in, WordValidation validator){
        Set<String> seenMisspellings = new LinkedHashSet<>();
        while(in.hasNext()){
            String rawToken = in.next();
@@ -70,8 +107,10 @@ public class SpellChecker {
            }
 
 
+
+
            if (seenMisspellings.contains(word)){
-               continue; //tedalready repor
+               continue; //tedalready report
            } else {
                seenMisspellings.add(word); // mark it as seen
                List<String> suggestions = getSuggestions(word, validator);
@@ -82,14 +121,24 @@ public class SpellChecker {
    }
 
 
+
+
+   /**
+    * @param args
+    * @param validator
+    */
    private static void handleArgsMode(String[] args, WordValidation validator){
        for(String raw : args){
            String word = normalize(raw);
 
 
+
+
            if(word.isEmpty()){
                continue;
            }
+
+
 
 
            if(validator.containsWord(word)){
@@ -100,5 +149,19 @@ public class SpellChecker {
            }
        }
 
+
+   }
+
+
+   public static void main(String[] args) {
+       WordValidation validator = new WordValidation("words.txt");
+  
+       if (args.length > 0) {
+           handleArgsMode(args, validator); 
+       } else {
+           Scanner in = new Scanner(System.in);
+           handleStdinMode(in, validator);
+           in.close();
+       }
    }
 }
