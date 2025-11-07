@@ -35,7 +35,7 @@ public class WordValidation implements SpellingOperations {
         String word = fields[0];
         // adds word to parasedFile list
         tempFile.add(word);
-        System.out.println("This is the word before getting rid of any puncutation: " + word);
+        // System.out.println("This is the word before getting rid of any puncutation: " + word);
     }
     file.close();
 
@@ -65,7 +65,7 @@ public class WordValidation implements SpellingOperations {
         dictionary.add(element);
     }
     // for testing purposes
-    System.out.println("This is the hashset after parsing the file: " + dictionary);
+    // System.out.println("This is the hashset after parsing the file: " + dictionary);
     }
 
 

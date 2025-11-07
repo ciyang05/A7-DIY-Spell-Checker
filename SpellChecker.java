@@ -16,7 +16,7 @@ public class SpellChecker {
       System.out.println("Not found: " + word);
 
 
-      if (suggestions != null && suggestions.isEmpty()){
+      if (suggestions != null && !suggestions.isEmpty()){
           StringBuilder sb = new StringBuilder( " Suggestions: ");
           System.out.println(" Suggestions: ");
           for (String s: suggestions){
@@ -33,9 +33,9 @@ public class SpellChecker {
 
 
 
-  /**
-  * @param word
-  */
+   /**
+    * @param word
+    */
     static void reportCorrect(String word) {
        System.out.println("" + word + "' is spelled correctly.");
    }
