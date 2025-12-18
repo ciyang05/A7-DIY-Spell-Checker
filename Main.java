@@ -1,7 +1,14 @@
 import java.util.ArrayList;
 
-//Test class for WordValidation
+/**
+ * Test class for WordValidation
+ */
 public class Main {
+
+    /**
+     * Runs and tests program
+     * @param args an argument
+     */
     public static void main(String[] args) {
         WordValidation validator = new WordValidation("words.txt");
 

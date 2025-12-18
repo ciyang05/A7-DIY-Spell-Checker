@@ -1,18 +1,21 @@
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.HashSet;
 
-
+/**
+ * Interacts with user
+ * Checks words read in as arguments and checks all words in a file
+ */
 public class SpellChecker {
 
    /**
-    * @param word
-    * @param suggestions
+    * @param word the word to check
+    * @param suggestions , list of spelling suggestions
     */
-   static void reportNotFound(String word, List<String> suggestions){
+   static void reportNotFound(String word, Set<String> suggestions){
       System.out.println("Not found: " + word);
 
 
@@ -21,48 +24,33 @@ public class SpellChecker {
           System.out.println(" Suggestions: ");
           for (String s: suggestions){
               sb.append(s).append(" ");
-
-
-
-
           }
           System.out.println(sb.toString());
       }
   }
 
 
-
-
    /**
-    * @param word
+    * @param word the word to check
     */
     static void reportCorrect(String word) {
        System.out.println("" + word + "' is spelled correctly.");
    }
 
-
-
-
    /**
-    * @param word
-    * @param validator
-    * @return limitedSuggestions
+    * @param word the word to check
+    * @param validator , WordValidation object
+    * @return limitedSuggestions, suggested spellings
     */
-   static List<String> getSuggestions(String word, WordValidation wordValidation){
+   static Set<String> getSuggestions(String word, WordValidation wordValidation){
        final int MAX_SUGGESTIONS = 10;
        List<String> allSuggestions = wordValidation.nearMisses(word);
 
-
-
-
        if (allSuggestions == null || allSuggestions.isEmpty()){
-           return new ArrayList<>();
+           return new HashSet<>();
        }
 
-
-
-
-       List<String> limitedSuggestions = new ArrayList<>();
+       Set<String> limitedSuggestions = new HashSet<>();
        for(int i = 0; i < allSuggestions.size() && i < MAX_SUGGESTIONS; i++){
            limitedSuggestions.add(allSuggestions.get(i));
        }
@@ -70,11 +58,9 @@ public class SpellChecker {
    }
 
 
-
-
    /**
-    * @param raw
-    * @return s
+    * @param raw , raw input word
+    * @return normalized word
     */
    static String normalize(String raw){
        if (raw == null){
@@ -86,11 +72,9 @@ public class SpellChecker {
    }
 
 
-
-
    /**
-    * @param in
-    * @param validator
+    * @param in , scanner object
+    * @param validator , WordValidation object
     */
    public static void handleStdinMode(Scanner in, WordValidation validator){
        Set<String> seenMisspellings = new LinkedHashSet<>();
@@ -106,14 +90,11 @@ public class SpellChecker {
                continue; // it's a correct word
            }
 
-
-
-
            if (seenMisspellings.contains(word)){
                continue; //tedalready report
            } else {
                seenMisspellings.add(word); // mark it as seen
-               List<String> suggestions = getSuggestions(word, validator);
+               Set<String> suggestions = getSuggestions(word, validator);
                reportNotFound(word, suggestions);
            }
        }
@@ -121,38 +102,32 @@ public class SpellChecker {
    }
 
 
-
-
    /**
-    * @param args
-    * @param validator
+    * @param args an argument
+    * @param validator , WordValidation object
     */
    private static void handleArgsMode(String[] args, WordValidation validator){
        for(String raw : args){
            String word = normalize(raw);
 
-
-
-
            if(word.isEmpty()){
                continue;
            }
 
-
-
-
            if(validator.containsWord(word)){
                reportCorrect(word);
            } else {
-               List<String> suggestions = getSuggestions(word, validator);
+               Set<String> suggestions = getSuggestions(word, validator);
                reportNotFound(word, suggestions);
            }
        }
 
-
    }
 
-
+   /**
+    * Main method to run the class
+    * @param args an argument
+    */
    public static void main(String[] args) {
        WordValidation validator = new WordValidation("words.txt");
   

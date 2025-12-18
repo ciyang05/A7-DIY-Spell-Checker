@@ -5,6 +5,10 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Creates hashset of valid words and checks whether word is found in dictionary
+ * Handles misspelled words
+ */
 public class WordValidation implements SpellingOperations {
 
     // empty hashset to contain words in the words.txt file
@@ -12,8 +16,7 @@ public class WordValidation implements SpellingOperations {
 
     /**
      * constructor that creates a hashset based off of word file
-     * @param args
-     * @return nothing
+     * @param args an argument
      */
     public WordValidation(String filename) {
         Scanner file = null;
@@ -51,7 +54,7 @@ public class WordValidation implements SpellingOperations {
     // iterates tempFile, turns every word in the list to lowercase, match it to the pattern
     // if the word fits the pattern, add it to the final parsedFile list 
     for (String word : tempFile) {
-        word.toLowerCase();
+        word = word.toLowerCase();
         Matcher matcher = pattern.matcher(word);
 
         if (matcher.matches()) {
